@@ -1,4 +1,4 @@
 *.pyc
-*.pyx
 *.so
+*.png
 .cache/*
