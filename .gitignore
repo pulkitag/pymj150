@@ -47,3 +47,7 @@ outputfile
 tmp*
 cymj.c
 **/.git
+*.pyc
+*.so
+*.png
+.cache/*
