@@ -60,7 +60,9 @@ The easy solution is to `import mujoco_py` _before_ `import glfw`.
         if sys.platform == 'darwin':
             Builder = MacExtensionBuilder
         elif sys.platform == 'linux':
-            if exists('/usr/local/nvidia/lib64'):
+            nvidia_lib_dir = '/usr/lib/x86_64-linux-gnu/'
+            #nvidia_lib_dir = '/usr/local/nvidia/lib64/'
+            if exists(nvidia_lib_dir):
                 Builder = LinuxGPUExtensionBuilder
             else:
                 Builder = LinuxCPUExtensionBuilder
@@ -186,7 +188,8 @@ class LinuxGPUExtensionBuilder(MujocoExtensionBuilder):
 
     def build(self):
         so_file_path = super().build()
-        nvidia_lib_dir = '/usr/local/nvidia/lib64/'
+        #nvidia_lib_dir = '/usr/local/nvidia/lib64/'
+        nvidia_lib_dir = '/usr/lib/x86_64-linux-gnu/'
         fix_shared_library(so_file_path, 'libOpenGL.so',
                            join(nvidia_lib_dir, 'libOpenGL.so.0'))
         fix_shared_library(so_file_path, 'libEGL.so',
