@@ -51,3 +51,4 @@ cymj.c
 *.so
 *.png
 .cache/*
+build/*

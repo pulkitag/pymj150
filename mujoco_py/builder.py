@@ -16,6 +16,8 @@ from Cython.Distutils.old_build_ext import old_build_ext as build_ext
 
 from mujoco_py.utils import discover_mujoco
 
+#NVIDIA_LIB_DIR = '/usr/local/nvidia/lib64'
+NVIDIA_LIB_DIR  = '/usr/lib/x86_64-linux-gnu'
 
 def load_cython_ext(mjpro_path):
     """
@@ -41,7 +43,7 @@ The easy solution is to `import mujoco_py` _before_ `import glfw`.
     if sys.platform == 'darwin':
         Builder = MacExtensionBuilder
     elif sys.platform == 'linux':
-        if exists('/usr/local/nvidia/lib64') and os.getenv('MUJOCO_PY_FORCE_CPU') is None:
+        if exists(NVIDIA_LIB_DIR) and os.getenv('MUJOCO_PY_FORCE_CPU') is None:
             Builder = LinuxGPUExtensionBuilder
         else:
             Builder = LinuxCPUExtensionBuilder
@@ -111,6 +113,7 @@ class MujocoExtensionBuilder():
             extra_compile_args=[
                 '-fopenmp',  # needed for OpenMP
                 '-w',  # suppress numpy compilation warnings
+                '-std=c99',
             ],
             extra_link_args=['-fopenmp'],
             language='c')
@@ -177,7 +180,7 @@ class LinuxGPUExtensionBuilder(MujocoExtensionBuilder):
 
     def _build_impl(self):
         so_file_path = super()._build_impl()
-        nvidia_lib_dir = '/usr/local/nvidia/lib64/'
+        nvidia_lib_dir = NVIDIA_LIB_DIR
         fix_shared_library(so_file_path, 'libOpenGL.so',
                            join(nvidia_lib_dir, 'libOpenGL.so.0'))
         fix_shared_library(so_file_path, 'libEGL.so',
